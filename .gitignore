@@ -1,0 +1,16 @@
+# Specify filepatterns you want git to ignore.
+config.h
+*.o
+
+# dmenu files to ignore
+dmenu/dmenu
+dmenu/stest
+
+# slstatus files to ignore
+slstatus/slstatus
+
+# st files to ignore
+st/st
+
+# surf files to ignore
+surf/surf

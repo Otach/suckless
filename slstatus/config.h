@@ -67,6 +67,7 @@ static const struct arg args[] = {
 	{ ram_perc,     " RAM %s%% |",      NULL        		},
 	{ disk_perc,    " Disk %s%% |",     "/"         		}, 
     { get_volume,   " Volume: %s |",    NULL                },
-	// { battery_perc, " Battery: %s |",	"BAT0" 				},
+	{ battery_perc, " Battery: %s (",	"BAT0" 				},
+	{ battery_state,"%s) |",			"BAT0"				},
 	{ datetime, 	" %s ",           	"%x - %I:%M:%S %p" 	}
 };

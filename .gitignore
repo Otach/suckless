@@ -6,6 +6,9 @@ config.h
 dmenu/dmenu
 dmenu/stest
 
+# slock files to ignore
+slock/slock
+
 # slstatus files to ignore
 slstatus/slstatus
 

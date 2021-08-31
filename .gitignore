@@ -17,3 +17,6 @@ st/st
 
 # surf files to ignore
 surf/surf
+
+# dwm files to ignore
+dwm/dwm

@@ -5,9 +5,8 @@
 # Dependencies: dmenu
 
 declare -A commands
+commands["Lock"]="slock"
 commands["Reboot"]="systemctl reboot"
-commands["Lock Screen"]="i3lock-multimonitor -i /home/mason/Pictures/background.png"
-commands["Blackout Lock Screen"]="slock"
 commands["Shutdown"]="systemctl poweroff"
 
 choice=$(printf '%s\n' "${!commands[@]}" | dmenu -nb '#222222' -nf '#666666' -sb '#000000' -sf '#bbbbbb' -l 4 -i -p 'Shutdown menu:' "$@")
@@ -15,6 +14,9 @@ choice=$(printf '%s\n' "${!commands[@]}" | dmenu -nb '#222222' -nf '#666666' -sb
 if [[ -z $choice ]]; then
     exit 1
 fi
+
+# TODO:
+#   Add a confirmation prompt when reboot or shutdown is selected
 
 eval "${commands["${choice}"]}"
 

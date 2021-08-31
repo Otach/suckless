@@ -2,7 +2,7 @@
 #
 # Script name: dmconf
 # Description: Choose from a list of configuration files to edit.
-# Dependencies: dmenu, emacsclient
+# Dependencies: dmenu, st, vim
 
 DMEDITOR="vim"
 
@@ -43,5 +43,5 @@ if [ "$choice" ]; then
 
 # What to do if we just escape without choosing anything.
 else
-    echo "Program terminated." && exit 0
+    exit 0
 fi

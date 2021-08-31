@@ -2,16 +2,16 @@
 #
 # Script name: dmconf
 # Description: Choose from a list of configuration files to edit.
-# Dependencies: dmenu, st, vim
+# Dependencies: dmenu, vim
 
 DMEDITOR="vim"
 
 declare -A options
 options[bash]="$HOME/.bashrc"
-options[bashprofile]="$HOME/.profile"
-options[task]="$HOME/.task"
-options[git]="$HOME/.gitconfig"
-options[vim]="$HOME/.vimrc"
+options[bashprofile]="$HOME/.bash_profile"
+options[task]="$HOME/.config/task/taskrc"
+options[git]="$HOME/.config/git/config"
+options[vim]="$HOME/.config/vim/vimrc"
 options[xinit]="$HOME/.xinitrc"
 options[dunst]="$HOME/.config/dunst/dunstrc"
 options[barrier]="$HOME/.config/barrier"
@@ -43,5 +43,5 @@ if [ "$choice" ]; then
 
 # What to do if we just escape without choosing anything.
 else
-    exit 0
+    echo "Program terminated." && exit 0
 fi

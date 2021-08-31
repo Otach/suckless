@@ -77,7 +77,6 @@ static const char *firefox[]    = { "firefox-developer-edition", NULL };
 static const char *privateff[]  = { "firefox-developer-edition", "--private-window", NULL };
 static const char *firefoxyt[]  = { "firefox-developer-edition", "--new-window", "https://www.youtube.com", NULL };
 static const char *slock[]      = { "slock", NULL };
-static const char *i3lock[]     = { "i3lock-multimonitor", "-i", "/home/mason/Pictures/background.png", NULL };
 static const char *subl[] 		= { "subl", NULL };
 static const char *smerge[]		= { "smerge", NULL };
 static const char *pcmanfm[]	= { "pcmanfm", NULL };
@@ -124,12 +123,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Return,  zoom,           {0} },
 	{ MODKEY,                       XK_Tab,     view,           {0} },
 	{ MODKEY|ShiftMask,             XK_c,       killclient,     {0} },
-	{ MODKEY,                       XK_t,       setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,       setlayout,      {.v = &layouts[1]} },
-	{ MODKEY|ShiftMask,             XK_m,       setlayout,      {.v = &layouts[2]} },
-	{ MODKEY|ShiftMask,             XK_d,       setlayout,      {.v = &layouts[3]} },
-	{ MODKEY|ShiftMask,             XK_t,       setlayout,      {.v = &layouts[4]} },
-	{ MODKEY,                       XK_space,   setlayout,      {0} },
+	{ MODKEY,                       XK_t,       setlayout,      {.v = &layouts[0]} }, // Set tiling layout
+	{ MODKEY,                       XK_f,       setlayout,      {.v = &layouts[1]} }, // Set floating layout
+	// { MODKEY,                       XK_space,   setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,   togglefloating, {0} },
 	{ MODKEY,                       XK_0,       view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,       tag,            {.ui = ~0 } },
@@ -145,8 +141,7 @@ static Key keys[] = {
     { MODKEY,                       0x1008ff13, spawn,          {.v = sincaudio } },
    	{ 0,                            0x1008ff12, spawn,          {.v = muteaudio } },
    	{ MODKEY,                       XK_y,       spawn,          {.v = firefoxyt } },
-  	{ MODKEY,                       XK_l,       spawn,          {.v = i3lock } },
-    { MODKEY|ShiftMask,             XK_l,       spawn,          {.v = slock } },
+    { MODKEY,			            XK_l,       spawn,          {.v = slock } },
 	{ MODKEY, 						XK_s,		spawn,          {.v = subl } },
 	{ MODKEY|ShiftMask, 			XK_s,		spawn,          {.v = smerge } },
 	{ MODKEY,						XK_u,		spawn,			{.v = stormount } },
@@ -155,13 +150,9 @@ static Key keys[] = {
 	{ MODKEY,						XK_e,		spawn,			{.v = pcmanfm } },
 	{ MODKEY, 						XK_v,		spawn,			{.v = virtman } },
 	{ MODKEY,						XK_Left,	focusnthmon,	{.i = 1 } },
-	{ MODKEY,						XK_Down,	focusnthmon,	{.i = 0 } },
-	{ MODKEY,						XK_Up,		focusnthmon,	{.i = 3 } },
-	{ MODKEY,						XK_Right,	focusnthmon,	{.i = 2 } },
+	{ MODKEY,						XK_Right,	focusnthmon,	{.i = 0 } },
 	{ MODKEY|ShiftMask,				XK_Left, 	tagnthmon,		{.i = 1 } },
-	{ MODKEY|ShiftMask,				XK_Down, 	tagnthmon,		{.i = 0 } },
-	{ MODKEY|ShiftMask,				XK_Up,  	tagnthmon,		{.i = 3 } },
-	{ MODKEY|ShiftMask,				XK_Right, 	tagnthmon,		{.i = 2 } },
+	{ MODKEY|ShiftMask,				XK_Right, 	tagnthmon,		{.i = 0 } },
     TAGKEYS(                        XK_1,                       0)
 	TAGKEYS(                        XK_2,                       1)
 	TAGKEYS(                        XK_3,                       2)

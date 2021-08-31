@@ -92,6 +92,8 @@ static const char *sdecaudio[]  = { "pamixer", "--allow-boost", "-d", "1", NULL 
 // Dmenu Script Commands
 static const char *passmenu[]	= { "sh", "/home/mason/suckless/dmenu/scripts/passmenu.sh", NULL };
 static const char *potpmenu[]	= { "sh", "/home/mason/suckless/dmenu/scripts/passotpmenu.sh", NULL };
+static const char *stormount[]	= { "sh", "/home/mason/suckless/dmenu/scripts/mount_remote_shared.sh", NULL };
+static const char *storumount[] = { "sh", "/home/mason/suckless/dmenu/scripts/usbumount.sh", NULL };
 static const char *dmconf[]     = { "sh", "/home/mason/suckless/dmenu/scripts/dmconf.sh", NULL };
 static const char *comppass[]	= { "sh", "/home/mason/suckless/dmenu/scripts/comppass.sh", NULL };
 static const char *nmdmenu[]	= { "python", "/home/mason/suckless/dmenu/scripts/networkmanager_dmenu", NULL };
@@ -142,6 +144,8 @@ static Key keys[] = {
     { MODKEY,			            XK_l,       spawn,          {.v = slock } },
 	{ MODKEY, 						XK_s,		spawn,          {.v = subl } },
 	{ MODKEY|ShiftMask, 			XK_s,		spawn,          {.v = smerge } },
+	{ MODKEY,						XK_u,		spawn,			{.v = stormount } },
+	{ MODKEY|ShiftMask,				XK_u,		spawn,			{.v = storumount } },
 	{ MODKEY,						XK_c,		spawn,			{.v = dmconf } },
 	{ MODKEY,						XK_e,		spawn,			{.v = pcmanfm } },
 	{ MODKEY, 						XK_v,		spawn,			{.v = virtman } },

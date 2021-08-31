@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "hack:pixelsize=16:antialias=true:autohint=true";
+static char *font = "hack:pixelsize=14:antialias=true:autohint=true";
 static int borderpx = 2;
 
 /*
@@ -34,7 +34,7 @@ static float chscale = 1.0;
  *
  * More advanced example: L" `'\"()[]{}"
  */
-wchar_t *worddelimiters = L" ";
+wchar_t *worddelimiters = L" -()[]{};:'\"";
 
 /* selection timeouts (in milliseconds) */
 static unsigned int doubleclicktimeout = 300;

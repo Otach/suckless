@@ -150,9 +150,13 @@ static Key keys[] = {
 	{ MODKEY,						XK_e,		spawn,			{.v = pcmanfm } },
 	{ MODKEY, 						XK_v,		spawn,			{.v = virtman } },
 	{ MODKEY,						XK_Left,	focusnthmon,	{.i = 1 } },
-	{ MODKEY,						XK_Right,	focusnthmon,	{.i = 0 } },
+	{ MODKEY,						XK_Down,	focusnthmon,	{.i = 0 } },
+	{ MODKEY,						XK_Up,		focusnthmon,	{.i = 3 } },
+	{ MODKEY,						XK_Right,	focusnthmon,	{.i = 2 } },
 	{ MODKEY|ShiftMask,				XK_Left, 	tagnthmon,		{.i = 1 } },
-	{ MODKEY|ShiftMask,				XK_Right, 	tagnthmon,		{.i = 0 } },
+	{ MODKEY|ShiftMask,				XK_Down, 	tagnthmon,		{.i = 0 } },
+	{ MODKEY|ShiftMask,				XK_Up,  	tagnthmon,		{.i = 3 } },
+	{ MODKEY|ShiftMask,				XK_Right, 	tagnthmon,		{.i = 2 } },
     TAGKEYS(                        XK_1,                       0)
 	TAGKEYS(                        XK_2,                       1)
 	TAGKEYS(                        XK_3,                       2)

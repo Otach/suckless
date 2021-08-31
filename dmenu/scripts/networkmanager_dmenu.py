@@ -26,7 +26,7 @@ from subprocess import Popen, PIPE
 
 import gi
 gi.require_version('NM', '1.0')
-from gi.repository import GLib, NM  # pylint: disable=wrong-import-position
+from gi.repository import GLib, NM
 
 ENV = os.environ.copy()
 ENV['LC_ALL'] = 'C'
@@ -38,6 +38,7 @@ CONNS = CLIENT.get_connections()
 
 CONF = configparser.ConfigParser()
 CONF.read(expanduser("~/.config/networkmanager-dmenu/config.ini"))
+
 
 def dmenu_cmd(num_lines, prompt="Networks", active_lines=None):  # pylint: disable=too-many-branches
     """Parse config.ini if it exists and add options to the dmenu command
@@ -240,15 +241,13 @@ def ap_security(nm_ap):
     wpa_flags = nm_ap.get_wpa_flags()
     rsn_flags = nm_ap.get_rsn_flags()
     sec_str = ""
-    if ((flags & getattr(NM, '80211ApFlags').PRIVACY) and
-            (wpa_flags == 0) and (rsn_flags == 0)):
+    if ((flags & getattr(NM, '80211ApFlags').PRIVACY) and (wpa_flags == 0) and (rsn_flags == 0)):
         sec_str += " WEP"
     if wpa_flags != 0:
         sec_str += " WPA1"
     if rsn_flags != 0:
         sec_str += " WPA2"
-    if ((wpa_flags & getattr(NM, '80211ApSecurityFlags').KEY_MGMT_802_1X) or
-            (rsn_flags & getattr(NM, '80211ApSecurityFlags').KEY_MGMT_802_1X)):
+    if ((wpa_flags & getattr(NM, '80211ApSecurityFlags').KEY_MGMT_802_1X) or (rsn_flags & getattr(NM, '80211ApSecurityFlags').KEY_MGMT_802_1X)):
         sec_str += " 802.1X"
 
     # If there is no security use "--"
@@ -259,6 +258,7 @@ def ap_security(nm_ap):
 
 class Action():  # pylint: disable=too-few-public-methods
     """Helper class to execute functions from a string variable"""
+
     def __init__(self,
                  name,
                  func,
@@ -317,9 +317,7 @@ def process_ap(nm_ap, is_active, adapter):
     if is_active:
         CLIENT.deactivate_connection_async(nm_ap, None, deactivate_cb, nm_ap)
     else:
-        conns_cur = [i for i in CONNS if
-                     i.get_setting_wireless() is not None and
-                     conn_matches_adapter(i, adapter)]
+        conns_cur = [i for i in CONNS if i.get_setting_wireless() is not None and conn_matches_adapter(i, adapter)]
         con = nm_ap.filter_connections(conns_cur)
         if len(con) > 1:
             raise ValueError("There are multiple connections possible")
@@ -440,18 +438,14 @@ def create_eth_actions(eths, active):
 def create_gsm_actions(gsms, active):
     """Create the list of strings to display with associated function
     (activate/deactivate) GSM connections."""
-    active_gsms = [i for i in active if
-                   i.get_connection() is not None and
-                   i.get_connection().is_type(NM.SETTING_GSM_SETTING_NAME)]
+    active_gsms = [i for i in active if i.get_connection() is not None and i.get_connection().is_type(NM.SETTING_GSM_SETTING_NAME)]
     return _create_vpngsm_actions(gsms, active_gsms, "GSM")
 
 
 def create_blue_actions(blues, active):
     """Create the list of strings to display with associated function
     (activate/deactivate) Bluetooth connections."""
-    active_blues = [i for i in active if
-                    i.get_connection() is not None and
-                    i.get_connection().is_type(NM.SETTING_BLUETOOTH_SETTING_NAME)]
+    active_blues = [i for i in active if i.get_connection() is not None and i.get_connection().is_type(NM.SETTING_BLUETOOTH_SETTING_NAME)]
     return _create_vpngsm_actions(blues, active_blues, "Bluetooth")
 
 
@@ -543,10 +537,7 @@ def get_selection(all_actions):
 
     if rofi_highlight is False:
         action = [i for i in all_actions
-                  if ((str(i).strip() == str(sel.strip())
-                       and not i.is_active) or
-                      ('== ' + str(i) == str(sel.rstrip('\n'))
-                       and i.is_active))]
+                  if ((str(i).strip() == str(sel.strip()) and not i.is_active) or ('== ' + str(i) == str(sel.rstrip('\n')) and i.is_active))]
     else:
         action = [i for i in all_actions if str(i).strip() == sel.strip()]
     assert len(action) == 1, \
@@ -807,9 +798,7 @@ def create_ap_list(adapter, active_connections):
     active_ap = adapter.get_active_access_point()
     aps_all = sorted(adapter.get_access_points(),
                      key=lambda a: a.get_strength(), reverse=True)
-    conns_cur = [i for i in CONNS if
-                 i.get_setting_wireless() is not None and
-                 conn_matches_adapter(i, adapter)]
+    conns_cur = [i for i in CONNS if i.get_setting_wireless() is not None and conn_matches_adapter(i, adapter)]
     try:
         ap_conns = active_ap.filter_connections(conns_cur)
         active_ap_name = ssid_to_utf8(active_ap)

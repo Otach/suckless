@@ -737,7 +737,7 @@ int
 main(int argc, char *argv[])
 {
 	XWindowAttributes wa;
-	int i, fast = 0;
+	int i, fast = 0, raw = 0;
 
 	for (i = 1; i < argc; i++)
 		/* these options take no arguments */
@@ -751,7 +751,9 @@ main(int argc, char *argv[])
 		else if (!strcmp(argv[i], "-i")) { /* case-insensitive item matching */
 			fstrncmp = strncasecmp;
 			fstrstr = cistrstr;
-		} else if (i + 1 == argc)
+		} else if (!strcmp(argv[i], "-r"))
+			raw = 1;
+		else if (i + 1 == argc)
 			usage();
 		/* these options take one argument */
 		else if (!strcmp(argv[i], "-l"))   /* number of lines in vertical list */
@@ -806,9 +808,11 @@ main(int argc, char *argv[])
 
 	if (fast && !isatty(0)) {
 		grabkeyboard();
-		readstdin();
+		if (!raw)
+			readstdin();
 	} else {
-		readstdin();
+		if (!raw)
+			readstdin();
 		grabkeyboard();
 	}
 	setup();

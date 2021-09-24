@@ -1049,7 +1049,7 @@ getatomprop(Client *c, Atom prop)
 	Atom da, atom = None;
 
 	/* FIXME getatomprop should return the number of items and a pointer to
-	 * the stored data instead of this workaround */
+	* the stored data instead of this workaround */
 	Atom req = XA_ATOM;
 	if (prop == xatom[XembedInfo])
 		req = xatom[XembedInfo];
@@ -1301,7 +1301,7 @@ maprequest(XEvent *e)
 		resizebarwin(selmon);
 		updatesystray();
 	}
- 
+
 	if (!XGetWindowAttributes(dpy, ev->window, &wa))
 		return;
 	if (wa.override_redirect)
@@ -1773,7 +1773,7 @@ sendevent(Window w, Atom proto, int mask, long d0, long d1, long d2, long d3, lo
 	else {
 		exists = True;
 		mt = proto;
- 	}
+	}
 	if (exists) {
 		ev.type = ClientMessage;
 		ev.xclient.window = w;
@@ -2198,7 +2198,7 @@ unmapnotify(XEvent *e)
 	}
 	else if ((c = wintosystrayicon(ev->window))) {
 		/* KLUDGE! sometimes icons occasionally unmap their windows, but do
-		 * _not_ destroy them. We map those windows back */
+         ** _not_ destroy them. We map those windows back */
 		XMapRaised(dpy, c->win);
 		updatesystray();
 	}
@@ -2262,7 +2262,7 @@ updateclientlist()
 void updatecurrentdesktop(void){
 	long rawdata[] = { selmon->tagset[selmon->seltags] };
 	int i=0;
-	while(*rawdata >> i+1){
+	while(*rawdata >> (i+1)){
 		i++;
 	}
 	long data[] = { i };
@@ -2530,7 +2530,7 @@ updatesystray(void)
 	XFillRectangle(dpy, systray->win, drw->gc, 0, 0, w, bh);
 	XSync(dpy, False);
  }
- 
+
 
 void
 updatetitle(Client *c)

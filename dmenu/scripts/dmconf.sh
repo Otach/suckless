@@ -24,6 +24,7 @@ options[dwm]="$HOME/suckless/dwm/config.def.h"
 options[slock]="$HOME/suckless/slock/config.def.h"
 options[slstatus]="$HOME/suckless/slstatus/config.def.h"
 options[st]="$HOME/suckless/st/config.def.h"
+options[spotifyd]="$HOME/.config/spotifyd/spotifyd.conf"
 
 # Clean options array making sure that the files exist
 declare -A options_clean

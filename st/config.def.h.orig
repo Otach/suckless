@@ -8,7 +8,6 @@
 static char *font = "Hack Nerd Font:pixelsize=14:antialias=true:autohint=true";
 static char *font2[] = {
 	"JoyPixels:pixelsize=14:antialias=true:autohint=true",
-	"Inconsolata for Powerline:pixelsize=12:antialias=true:autohint=true",
 };
 static int borderpx = 2;
 

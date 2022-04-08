@@ -4,8 +4,6 @@
 # Description: Choose from a list of configuration files to edit.
 # Dependencies: dmenu, vim
 
-DMEDITOR="vim"
-
 declare -A options
 options[bash]="$HOME/.bashrc"
 options[bashprofile]="$HOME/.bash_profile"
@@ -34,13 +32,13 @@ declare -A options_clean
 
 # Piping the above array (cleaned) into dmenu.
 # We use "printf '%s\n'" to format the array one item to a line.
-choice=$(printf '%s\n' "${!options_clean[@]}" | sort | dmenu -nb '#222222' -nf '#666666' -sb '#000000' -sf '#bbbbbb' -i -p 'Edit config:' "$@")
+choice=$(printf '%s\n' "${!options_clean[@]}" | sort | dmenu -nb '#222222' -nf '#666666' -sb '#000000' -sf '#bbbbbb' -i -p ' Edit config:' "$@")
 
 
 # What to do when/if we choose a file to edit.
 if [ "$choice" ]; then
   cfg=$(printf '%s\n' "${options_clean["${choice}"]}")
-  st vim "$cfg"
+  st nvim "$cfg"
 
 # What to do if we just escape without choosing anything.
 else

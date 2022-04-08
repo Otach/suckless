@@ -62,14 +62,15 @@ static const char unknown_str[] = "n/a";
  * wifi_essid          WiFi ESSID                      interface name (wlan0)
  */
 static const struct arg args[] = {
-	/* function format          argument */
-    { kernel_release, "Kernel %s |",       NULL                     },
-	{ cpu_perc,       " CPU %s%% |",       NULL                     },
-	{ ram_perc,       " RAM %s%% ",        NULL        		        },
-    { ram_used,       "(%s) |",            NULL                     },
-	{ disk_perc,      " Disk %s%% ",       "/"         		        },
-    { disk_used,      "(%s/",              "/"                      },
-    { disk_total,     "%s) |",             "/"                      },
-    { get_volume,     " Volume: %s%% |",     NULL                   },
-	{ datetime, 	  " %s",           	   "%Y/%m/%d - %I:%M %p" 	}
+	/* function       format           argument */
+    { hostname,       " %s | ",       NULL                         },
+    { kernel_release, " %s |",        NULL                         },
+	{ cpu_perc,       "  %s%% |",     NULL                         },
+	{ ram_perc,       "  %s%% ",      NULL        		            },
+    { ram_used,       "(%s) |",        NULL                         },
+	{ disk_perc,      "  %s%% |",      "/"           		        },
+    //{ netspeed_rx,    " ﲐ %s",         "enp7s0",                    },
+    //{ netspeed_tx,    " ﲓ %s |",       "enp7s0",                    },
+    { get_volume,     " 墳 %s%% |",     NULL                         },
+	{ datetime, 	  "  %s",         "%Y/%m/%d - %I:%M %p |  "	}
 };

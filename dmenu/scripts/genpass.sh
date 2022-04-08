@@ -1,6 +1,6 @@
 #!/bin/sh
 
-site=$(dmenu -nb '#222222' -nf '#666666' -sb '#000000' -sf '#bbbbbb' -r -p "Site:")
+site=$(dmenu -nb '#222222' -nf '#666666' -sb '#000000' -sf '#bbbbbb' -r -p "聾 Site:")
 
 if [ "$site" == "" ]; then
     dunstify -a "Password Generator" "No password generated" "A password identifier was not specified"

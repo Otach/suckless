@@ -40,7 +40,7 @@ CONF = configparser.ConfigParser()
 CONF.read(expanduser("~/.config/networkmanager-dmenu/config.ini"))
 
 
-def dmenu_cmd(num_lines, prompt="Networks", active_lines=None):  # pylint: disable=too-many-branches
+def dmenu_cmd(num_lines, prompt=" Networks", active_lines=None):  # pylint: disable=too-many-branches
     """Parse config.ini if it exists and add options to the dmenu command
 
     Args: args - num_lines: number of lines to display
@@ -51,7 +51,7 @@ def dmenu_cmd(num_lines, prompt="Networks", active_lines=None):  # pylint: disab
     """
     dmenu_command = "dmenu"
     if not CONF.sections():
-        res = [dmenu_command, "-i", "-l", str(num_lines), "-p", str(prompt)]
+        res = [dmenu_command, "-nb", "#222222", "-nf", "#666666", "-sb", "#000000", "-sf", "#bbbbbb", "-i", "-l", str(num_lines), "-p", str(prompt)]
         res.extend(sys.argv[1:])
         return res
     if CONF.has_section('dmenu'):

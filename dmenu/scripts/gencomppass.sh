@@ -10,4 +10,4 @@ fi
 pass generate "company/$site" 30
 pass -c "company/$site"
 
-dunstify -a "Company Password Generator" "company/$site" "Password was generated for company/$site and copied to your clipboard. The clipboard will be cleared in 45 seconds."
+dunstify -a "Company Password Generator" "company/$site" "Password was generated for company/$site and copied to your clipboard. The clipboard will be cleared in 45 seconds." -i "/usr/share/icons/Arc/actions/24/edit-copy.png" -t 45000 -r 6666

@@ -5,9 +5,9 @@
 # Dependencies: dmenu
 
 declare -A commands
-commands["Lock"]="slock"
-commands["Reboot"]="systemctl reboot"
-commands["Shutdown"]="systemctl poweroff"
+commands[" Lock"]="slock"
+commands["⏼ Reboot"]="systemctl reboot"
+commands[" Shutdown"]="systemctl poweroff"
 
 choice=$(printf '%s\n' "${!commands[@]}" | dmenu -nb '#222222' -nf '#666666' -sb '#000000' -sf '#bbbbbb' -l 4 -i -p '⏻ Power menu:' "$@")
 
@@ -19,4 +19,3 @@ fi
 #   Add a confirmation prompt when reboot or shutdown is selected
 
 eval "${commands["${choice}"]}"
-

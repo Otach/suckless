@@ -6,7 +6,7 @@ static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
-static const int showsystray        = 0;     /* 0 means no systray */
+static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "Hack Nerd Font:size=12" };
@@ -101,12 +101,12 @@ static const char *togglespt[]   = { "spt", "pb", "-t", NULL };
 static const char *prevtrack[]   = { "spt", "pb", "-p", NULL };
 static const char *nexttrack[]   = { "spt", "pb", "-n", NULL };
 
-// Volume Commands
-static const char *muteaudio[]   = { "pamixer", "--toggle-mute", NULL };
-static const char *incaudio[]    = { "pamixer", "--allow-boost", "-i", "5", NULL };
-static const char *sincaudio[]   = { "pamixer", "--allow-boost", "-i", "1", NULL };
-static const char *decaudio[]    = { "pamixer", "--allow-boost", "-d", "5", NULL };
-static const char *sdecaudio[]   = { "pamixer", "--allow-boost", "-d", "1", NULL };
+// Volume Scripts Commands
+static const char *muteaudio[]   = { "sh", "/home/mason/suckless/dwm/scripts/toggle_mute.sh", NULL };
+static const char *incaudio[]    = { "sh", "/home/mason/suckless/dwm/scripts/volumeup.sh", "5", NULL };
+static const char *sincaudio[]   = { "sh", "/home/mason/suckless/dwm/scripts/volumeup.sh", "1", NULL };
+static const char *decaudio[]    = { "sh", "/home/mason/suckless/dwm/scripts/volumedown.sh", "5", NULL };
+static const char *sdecaudio[]   = { "sh", "/home/mason/suckless/dwm/scripts/volumedown.sh", "1", NULL };
 
 // Dmenu Script Commands
 static const char *passmenu[]    = { "sh", "/home/mason/suckless/dmenu/scripts/passmenu.sh", NULL };
@@ -247,7 +247,7 @@ static Key keys[] = {
     { MODKEY|ShiftMask,             XK_Up,      tagnthmon,      {.i = 2 } },
     { MODKEY|ShiftMask,             XK_Right,   tagnthmon,      {.i = 3 } },
     { MODKEY,                       XK_space,   spawn,          {.v = dunst_close } },
-    { MODKEY|ShiftMask,             XK_space,   spawn,          {.v = dunst_closeall } },
+    { MODKEY|ShiftMask,             XK_grave,   spawn,          {.v = dunst_closeall } },
     { ControlMask,                  XK_grave,   spawn,          {.v = dunst_history } },
     TAGKEYS(                        XK_1,                       0)
     TAGKEYS(                        XK_2,                       1)

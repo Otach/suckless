@@ -10,4 +10,4 @@ then
 		exit 1;
 fi
 
-dunstify -a "Pass" "$password" "Password copied to clipboard. Will clear in 45 seconds."
+dunstify -a "Pass" "$password" "Password copied to clipboard. Will clear in 45 seconds." -i "/usr/share/icons/Arc/actions/24/edit-copy.png" -t 45000 -r 6666

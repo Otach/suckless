@@ -10,4 +10,4 @@ fi
 pass generate $site 30
 pass -c $site
 
-dunstify -a "Password Generator" "$site" "Password was generated for $site and copied to your clipboard. The clipboard will be cleared in 45 seconds."
+dunstify -a "Password Generator" "$site" "Password was generated for $site and copied to your clipboard. The clipboard will be cleared in 45 seconds." -i "/usr/share/icons/Arc/actions/24/edit-copy.png" -r 6666 -t 45000

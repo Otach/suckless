@@ -21,14 +21,15 @@ if [ "$1" == "m" ]; then
     command=${commands[$choice]}
     full_command=$command",password="$pass
 
-    dunstify -a "Remote Share Mount" "Info" "Please press your security key to finish mounting"
+    dunstify -a "Remote Share Mount" "Info" "Please press your security key to finish mounting" -r 6667
     $full_command
 
     # Check that the command completed successfully. If not, give a notification saying that it failed.
     if [[ $? -ne 0 ]]; then
-        dunstify -a "Remote Share Mount" "Warning" "Could not mount the filesystem. Please try again."
+        dunstify -a "Remote Share Mount" "Warning" "Could not mount the filesystem. Please try again." -r 6667 -t 5000 -i "/usr/share/icons/Adwaita/32x32/status/dialog-error-symbolic.symbolic.png"
         exit 4
     fi
+    dunstify -a "Remote Share Mount" "Success" "Filesystem Mounted" -i "/usr/share/icons/Adwaita/32x32/places/network-server-symbolic.symbolic.png" -r 6667 -t 5000
 
 elif [ "$1" == "u" ]; then
 
@@ -45,7 +46,7 @@ elif [ "$1" == "u" ]; then
 
     command=${umount_commands[$choice]}
 
-    dunstify -a "Remote Share Unmount" "Info" "Please press your security key to finish unmounting"
+    dunstify -a "Remote Share Unmount" "Info" "Please press your security key to finish unmounting" -t 5000
     $command
 
 else

@@ -42,5 +42,5 @@ if [ "$choice" ]; then
 
 # What to do if we just escape without choosing anything.
 else
-    echo "Program terminated." && exit 0
+    exit 0
 fi

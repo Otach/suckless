@@ -69,8 +69,6 @@ static const struct arg args[] = {
 	{ ram_perc,       "  %s%% ",      NULL        		            },
     { ram_used,       "(%s) |",        NULL                         },
 	{ disk_perc,      "  %s%% |",      "/"           		        },
-    //{ netspeed_rx,    " ﲐ %s",         "enp7s0",                    },
-    //{ netspeed_tx,    " ﲓ %s |",       "enp7s0",                    },
     { get_volume,     " 墳 %s%% |",     NULL                         },
 	{ datetime, 	  "  %s",         "%Y/%m/%d - %I:%M %p |  "	}
 };

@@ -19,7 +19,7 @@ static const char col_gray5[]       = "#eeeeee";
 static const char col_red[]         = "#dd0000";
 static const char col_black[]       = "#000000";
 static const char col_white[]       = "#ffffff";
-static const char run_application_preferences[] = "lxappearance,firefox-developer-edition,pavucontrol,pcmanfm,thunderbird,nvidia-setting,smerge,subl,virt-manager,discord,cherrytree,evince,designer-qt5,libreoffice,anydesk";
+static const char run_application_preferences[] = "lxappearance,firefox-developer-edition,pavucontrol,thunar,thunderbird,nvidia-setting,smerge,subl,virt-manager,discord,cherrytree,evince,designer-qt5,libreoffice,anydesk";
 static const char *colors[][3]      = {
     /*               fg         bg         border   */
     //[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
@@ -44,14 +44,15 @@ static const Rule rules[] = {
      *  WM_NAME(STRING) = title
      */
     /* class                        instance         title                                   tags mask     isfloating   monitor */
-    { "Gimp",                       NULL,            NULL,                                   0,            1,           -1 },
+    { "Gimp",                       NULL,            NULL,                                   0,            0,           -1 },
     { "firefoxdeveloperedition",    "Navigator",     NULL,                                   0,            0,            1 },
     { "firefoxdeveloperedition",    "Navigator",     "YouTube — Firefox Developer Edition",  0,            0,            2 },
     { "Thunderbird",                "Mail",          NULL,                                   1 << 1,       0,            1 },
     { "Thunderbird",                "Calendar",      NULL,                                   1 << 1,       1,            1 },
     { "Sublime_text",               "sublime_text",  NULL,                                   0,            0,            0 },
     { "Sublime_merge",              "sublime_merge", NULL,                                   1 << 1,       0,            0 },
-    { "discord",                    "discord",       NULL,                                   1 << 2,       0,            1 }
+    { "discord",                    "discord",       NULL,                                   1 << 2,       0,            1 },
+    { "obs",                        "obs",           NULL,                                   1 << 2,       0,            3 }
 };
 
 
@@ -91,7 +92,7 @@ static const char *firefoxyt[]   = { "firefox-developer-edition", "--new-window"
 static const char *slock[]       = { "slock", NULL };
 static const char *subl[]        = { "subl", NULL };
 static const char *smerge[]      = { "smerge", NULL };
-static const char *pcmanfm[]     = { "pcmanfm", NULL };
+static const char *fileman[]     = { "thunar", NULL };
 static const char *virtman[]     = { "virt-manager", NULL };
 static const char *lxappear[]    = { "lxappearance", NULL };
 static const char *compcrm[]     = { "python", "/home/mason/Company/Programs/application/mwtech.py", NULL };
@@ -233,7 +234,7 @@ static Key keys[] = {
     { MODKEY,                       XK_s,       spawn,          {.v = subl } },
     { MODKEY|ShiftMask,             XK_s,       spawn,          {.v = smerge } },
     { MODKEY,                       XK_c,       spawn,          {.v = dmconf } },
-    { MODKEY,                       XK_e,       spawn,          {.v = pcmanfm } },
+    { MODKEY,                       XK_e,       spawn,          {.v = fileman } },
     { MODKEY,                       XK_v,       spawn,          {.v = virtman } },
     { MODKEY,                       XK_g,       spawn,          {.v = genpass } },
     { MODKEY|ShiftMask,             XK_g,       spawn,          {.v = gencpass } },

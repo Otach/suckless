@@ -1,6 +1,6 @@
 # Specify filepatterns you want git to ignore.
-*/config.h
-*/*.o
+**/config.h
+**/*.o
 
 # dmenu files to ignore
 dmenu/dmenu

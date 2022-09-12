@@ -3,7 +3,7 @@
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
-static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
+static const unsigned int systraypinning = 1;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 static const int showsystray        = 1;        /* 0 means no systray */
@@ -19,7 +19,7 @@ static const char col_gray5[]       = "#eeeeee";
 static const char col_red[]         = "#dd0000";
 static const char col_black[]       = "#000000";
 static const char col_white[]       = "#ffffff";
-static const char run_application_preferences[] = "lxappearance,firefox-developer-edition,pavucontrol,thunar,thunderbird,nvidia-setting,smerge,subl,virt-manager,discord,cherrytree,evince,designer-qt5,libreoffice,anydesk";
+static const char run_application_preferences[] = "lxappearance,firefox-developer-edition,pavucontrol,thunar,thunderbird,nvidia-setting,smerge,subl,virt-manager,discord,evince,designer-qt5,libreoffice,anydesk,obsidian";
 static const char *colors[][3]      = {
     /*               fg         bg         border   */
     //[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
@@ -61,14 +61,11 @@ static const float mfact     = 0.50; /* factor of master area size [0.05..0.95] 
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 
-#include "fibonacci.c"
 static const Layout layouts[] = {
     /* symbol     arrange function */
     { "[T]",      tile },    /* first entry is default */
     { "[F]",      NULL },    /* no layout function means floating behavior */
     { "[M]",      monocle },
-    { "[S]",      spiral },
-    { "[D]",      dwindle },
 };
 
 /* key definitions */
@@ -88,7 +85,6 @@ static const char *dmenucmd[]    = { "dmenu_run", "-i", "-p", " Run:", "-m", 
 static const char *termcmd[]     = { "st", NULL };
 static const char *firefox[]     = { "firefox-developer-edition", NULL };
 static const char *privateff[]   = { "firefox-developer-edition", "--private-window", NULL };
-static const char *firefoxyt[]   = { "firefox-developer-edition", "--new-window", "https://www.youtube.com", NULL };
 static const char *slock[]       = { "slock", NULL };
 static const char *subl[]        = { "subl", NULL };
 static const char *smerge[]      = { "smerge", NULL };
@@ -122,6 +118,7 @@ static const char *gencpass[]    = { "sh", "/home/mason/suckless/dmenu/scripts/g
 static const char *todoscript[]  = { "sh", "/home/mason/suckless/dmenu/scripts/todo.sh", NULL };
 static const char *mntwrkshare[] = { "sh", "/home/mason/suckless/dmenu/scripts/mount_remote_shares.sh", "m", NULL };
 static const char *untwrkshare[] = { "sh", "/home/mason/suckless/dmenu/scripts/mount_remote_shares.sh", "u", NULL };
+static const char *jfdownload[]  = { "python", "/home/mason/suckless/dmenu/scripts/jf-download-client.py", NULL };
 
 // Dunst Commands
 static const char *dunst_close[]      = { "dunstctl", "close", NULL };
@@ -135,7 +132,7 @@ static const char *dunst_history[]    = { "dunstctl", "history-pop", NULL };
 //c - Config Edit Menu
 //C - Kill Client
 //d - Decrease Master Stack Number
-//D - Set dwindle layout
+//D -
 //e - PC Man File Manager
 //E
 //f - Set floating layout
@@ -167,7 +164,7 @@ static const char *dunst_history[]    = { "dunstctl", "history-pop", NULL };
 //s - Sublime Text
 //S - Sublime Merge
 //t - Set tiling Layout
-//T - Set spiral Layout
+//T -
 //u - Mount Remote Shares
 //U - Unmount Remote Shares
 //v - Virt-manager
@@ -176,7 +173,7 @@ static const char *dunst_history[]    = { "dunstctl", "history-pop", NULL };
 //W - Firefox Private Browser
 //x - lxappearance
 //X
-//y - Youtube on Firefox
+//y - Jellyfin Downloader
 //Y
 //z
 //Z
@@ -209,9 +206,7 @@ static Key keys[] = {
     { MODKEY|ShiftMask,             XK_c,       killclient,     {0} },
     { MODKEY,                       XK_t,       setlayout,      {.v = &layouts[0]} }, // Set tiling layout
     { MODKEY,                       XK_f,       setlayout,      {.v = &layouts[1]} }, // Set floating layout
-    { MODKEY|ShiftMask,             XK_m,       setlayout,      {.v = &layouts[2]} },
-    { MODKEY|ShiftMask,             XK_t,       setlayout,      {.v = &layouts[3]} },
-    { MODKEY|ShiftMask,             XK_d,       setlayout,      {.v = &layouts[4]} },
+    { MODKEY|ShiftMask,             XK_m,       setlayout,      {.v = &layouts[2]} }, // Set monocle layout
     { MODKEY|ShiftMask,             XK_space,   togglefloating, {0} },
     { MODKEY,                       XK_0,       view,           {.ui = ~0 } },
     { MODKEY|ShiftMask,             XK_0,       tag,            {.ui = ~0 } },
@@ -229,7 +224,7 @@ static Key keys[] = {
     { 0,                            0x1008ff14, spawn,          {.v = togglespt } },
     { 0,                            0x1008ff16, spawn,          {.v = prevtrack } },
     { 0,                            0x1008ff17, spawn,          {.v = nexttrack } },
-    { MODKEY,                       XK_y,       spawn,          {.v = firefoxyt } },
+    { MODKEY,                       XK_y,       spawn,          {.v = jfdownload } },
     { MODKEY,                       XK_l,       spawn,          {.v = slock } },
     { MODKEY,                       XK_s,       spawn,          {.v = subl } },
     { MODKEY|ShiftMask,             XK_s,       spawn,          {.v = smerge } },

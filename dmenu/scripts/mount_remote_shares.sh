@@ -10,6 +10,7 @@ if [ "$1" == "m" ]; then
     commands["Picture Server"]="sudo mount -t cifs //167.99.237.45/pictures /mnt/remote-picture-server/ -o username=mason,uid=1000,gid=1000"
     commands["Company Server"]="sudo mount -t cifs //mwtechservices.com/mwtechservices /mnt/company-server/ -o username=mason,uid=1000,gid=1000"
     commands["Home Server"]="sudo mount -t cifs //192.168.254.80/mason /mnt/home-server/ -o username=mason,uid=mason,gid=mason"
+    commands["Movies"]="sudo mount -t cifs //192.168.254.80/storage_dir /mnt/movies/ -o username=mason,uid=mason,gid=mason"
     choice=$(printf '%s\n' "${!commands[@]}" | dmenu -nb '#222222' -nf '#666666' -sb '#000000' -sf '#bbbbbb' -l 4 -i -p " Mount Remote Share:")
 
     if [[ -z $choice ]]; then

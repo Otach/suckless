@@ -24,6 +24,8 @@ argument the icon-file and prints to stdout the encoded icon. Redirect it to
 icon.h to save it and reinstall st. You need to install both *imagemagick* and
 *inkscape* for the script to work.
 
+Bug: netwmicon.sh seems to distort the icon.
+
 ---
  icon.h | 686 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  x.c    |   7 +-

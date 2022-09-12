@@ -16,9 +16,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <X11/extensions/Xrandr.h>
-#ifdef XINERAMA
 #include <X11/extensions/Xinerama.h>
-#endif
 #include <X11/extensions/dpms.h>
 #include <X11/keysym.h>
 #include <X11/Xlib.h>
@@ -188,6 +186,8 @@ writemessage(Display *dpy, Window win, int screen)
 			XFree(xsi);
 }
 
+
+
 static const char *
 gethash(void)
 {
@@ -322,6 +322,7 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
 			if (running && oldc != color) {
 				for (screen = 0; screen < nscreens; screen++) {
 					drawlogo(dpy, locks[screen], color);
+					writemessage(dpy, locks[screen]->win, screen);
 				}
 				oldc = color;
 			}
@@ -337,7 +338,6 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
 						XResizeWindow(dpy, locks[screen]->win,
 						              rre->width, rre->height);
 					XClearWindow(dpy, locks[screen]->win);
-					writemessage(dpy, locks[screen]->win, screen);
 					break;
 				}
 			}
@@ -485,7 +485,7 @@ main(int argc, char **argv) {
 			die("slock: cannot open display\n");
 		font_names = XListFonts(dpy, "*", 10000 /* list 10000 fonts*/, &count_fonts);
 		for (i=0; i<count_fonts; i++) {
-			fprintf(stdout, "%s\n", *(font_names+i));
+			fprintf(stderr, "%s\n", *(font_names+i));
 		}
 		return 0;
 	default:
@@ -576,14 +576,13 @@ main(int argc, char **argv) {
 	/* everything is now blank. Wait for the correct password */
 	readpw(dpy, &rr, locks, nscreens, hash);
 
-	/* reset DPMS values to inital ones */
-	DPMSSetTimeouts(dpy, standby, suspend, off);
-	XSync(dpy, 0);
-
 	for (nlocks = 0, s = 0; s < nscreens; s++) {
 		XFreePixmap(dpy, locks[s]->drawable);
 		XFreeGC(dpy, locks[s]->gc);
 	}
+
+	/* reset DPMS values to initial ones */
+	DPMSSetTimeouts(dpy, standby, suspend, off);
 
 	XSync(dpy, 0);
 	XCloseDisplay(dpy);

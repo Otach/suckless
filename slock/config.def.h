@@ -21,7 +21,7 @@ static const char *text_color = "#ffffff";
 /* text size (must be a valid size) */
 static const char *font_name = "-adobe-times-bold-r-normal--25-180-100-100-p-132-iso8859-1";
 
-/* Text offsets */
+/* text offsets */
 static const int x_offset = 1875;
 static const int y_offset = 1580;
 

@@ -27,6 +27,11 @@ index 9855e21..c2a0ab2 100644
 +
 +/* text size (must be a valid size) */
 +static const char * font_name = "6x10";
+
++/* text offsets */
++static const int x_offset = 0;
++static const int y_offset = 0;
+
 diff --git a/config.mk b/config.mk
 index 74429ae..c4ccf66 100644
 --- a/config.mk
@@ -167,7 +172,7 @@ index 5ae738c..610929b 100644
 +				j++;
 +			}
 +
-+			XDrawString(dpy, win, gc, width + tab_size*tab_replace, height + 20*k, message + j, i - j);
++			XDrawString(dpy, win, gc, x_offset + width + tab_size*tab_replace, y_offset + height + 20*k, message + j, i - j);
 +			while (i < len && message[i] == '\n') {
 +				i++;
 +				j = i;

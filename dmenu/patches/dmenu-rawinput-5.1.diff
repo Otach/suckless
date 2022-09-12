@@ -1,0 +1,56 @@
+diff -up dmenu_git/dmenu.1 dmenu_read_input/dmenu.1
+--- dmenu_git/dmenu.1	2022-09-12 15:25:53.113384285 -0400
++++ dmenu_read_input/dmenu.1	2022-09-12 15:14:50.370970209 -0400
+@@ -3,7 +3,7 @@
+ dmenu \- dynamic menu
+ .SH SYNOPSIS
+ .B dmenu
+-.RB [ \-bfiv ]
++.RB [ \-bfivr ]
+ .RB [ \-l
+ .IR lines ]
+ .RB [ \-m
+@@ -57,6 +57,9 @@ from 0.
+ .BI \-p " prompt"
+ defines the prompt to be displayed to the left of the input field.
+ .TP
++.B \-r
++dmenu ignores stdin. This allows dmenu to become an input prompt
++.TP
+ .BI \-fn " font"
+ defines the font or font set used.
+ .TP
+diff -up dmenu_git/dmenu.c dmenu_read_input/dmenu.c
+--- dmenu_git/dmenu.c	2022-09-12 15:25:53.113384285 -0400
++++ dmenu_read_input/dmenu.c	2022-09-12 15:19:46.254883789 -0400
+@@ -38,6 +38,7 @@ static char text[BUFSIZ] = "";
+ static char *embed;
+ static int bh, mw, mh;
+ static int inputw = 0, promptw;
++static int rinput = 0;
+ static int lrpad; /* sum of left and right padding */
+ static size_t cursor;
+ static struct item *items = NULL;
+@@ -552,6 +553,10 @@ readstdin(void)
+ 	char *line = NULL;
+ 	size_t i, junk, size = 0;
+ 	ssize_t len;
++	if(rinput) {
++		inputw = lines = 0;
++		return;
++	}
+ 
+ 	/* read each line from stdin and add it to the item list */
+ 	for (i = 0; (len = getline(&line, &junk, stdin)) != -1; i++, line = NULL) {
+@@ -733,7 +738,9 @@ main(int argc, char *argv[])
+ 		else if (!strcmp(argv[i], "-i")) { /* case-insensitive item matching */
+ 			fstrncmp = strncasecmp;
+ 			fstrstr = cistrstr;
+-		} else if (i + 1 == argc)
++		} else if (!strcmp(argv[i], "-r")) /* ignores stdin for an input prompt */
++			rinput = 1;
++		else if (i + 1 == argc)
+ 			usage();
+ 		/* these options take one argument */
+ 		else if (!strcmp(argv[i], "-l"))   /* number of lines in vertical list */
+Common subdirectories: dmenu_git/.git and dmenu_read_input/.git

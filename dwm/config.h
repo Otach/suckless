@@ -2,6 +2,7 @@
 
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
+static const unsigned int gappx     = 4;        /* gap pixel between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int systraypinning = 1;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
@@ -19,12 +20,13 @@ static const char col_gray5[]       = "#eeeeee";
 static const char col_red[]         = "#dd0000";
 static const char col_black[]       = "#000000";
 static const char col_white[]       = "#ffffff";
+static const char col_cyan[]        = "#005577";
 static const char run_application_preferences[] = "lxappearance,firefox-developer-edition,pavucontrol,thunar,thunderbird,nvidia-setting,smerge,subl,virt-manager,discord,evince,designer-qt5,libreoffice,anydesk,obsidian";
 static const char *colors[][3]      = {
     /*               fg         bg         border   */
     //[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
     [SchemeNorm] = { col_gray4, col_black, col_black },
-    [SchemeSel] = { col_white, col_black, NULL }, // Currently selected tag
+    [SchemeSel] = { col_white, col_black, col_cyan }, // Currently selected tag
     [SchemeTag] = { col_gray1, col_black, NULL }, // Not selected tags
     [SchemeApp] = { col_gray3, col_black, NULL }, // Not Selected tag with Apps
 };

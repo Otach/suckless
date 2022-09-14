@@ -1,0 +1,455 @@
+diff -up slock_git_copy/config.def.h slock/config.def.h
+--- slock_git_copy/config.def.h	2022-09-13 21:47:48.959198392 -0400
++++ slock/config.def.h	2022-09-13 21:51:59.250456939 -0400
+@@ -10,3 +10,35 @@ static const char *colorname[NUMCOLS] =
+ 
+ /* treat a cleared input like a wrong password (color) */
+ static const int failonclear = 1;
++
++/* time in seconds before the monitor shuts down */
++static const int monitortime = 5;
++
++
++/* default message */
++static const char * message = "Suckless: Software that sucks less.";
++
++/* text color */
++static const char * text_color = "#ffffff";
++
++/* text size (must be a valid size) */
++static const char * font_name = "6x10";
++
++/* insert grid pattern with scale 1:1, the size can be changed with logosize */
++static const int logosize = 75;
++static const int logow = 12;	/* grid width and height for right center alignment*/
++static const int logoh = 6;
++
++static XRectangle rectangles[9] = {
++	/* x	y	w	h */
++	{ 0,	3,	1,	3 },
++	{ 1,	3,	2,	1 },
++	{ 0,	5,	8,	1 },
++	{ 3,	0,	1,	5 },
++	{ 5,	3,	1,	2 },
++	{ 7,	3,	1,	2 },
++	{ 8,	3,	4,	1 },
++	{ 9,	4,	1,	2 },
++	{ 11,	4,	1,	2 },
++
++};
+Only in slock: config.h
+diff -up slock_git_copy/config.mk slock/config.mk
+--- slock_git_copy/config.mk	2022-09-13 21:47:48.959198392 -0400
++++ slock/config.mk	2022-09-13 21:49:02.192900823 -0400
+@@ -10,12 +10,20 @@ MANPREFIX = ${PREFIX}/share/man
+ X11INC = /usr/X11R6/include
+ X11LIB = /usr/X11R6/lib
+ 
++# Xinerama, comment if you don't want it
++XINERAMALIBS  = -lXinerama
++XINERAMAFLAGS = -DXINERAMA
++
++# freetype
++FREETYPELIBS = -lXft
++FREETYPEINC = /usr/include/freetype2
++
+ # includes and libs
+-INCS = -I. -I/usr/include -I${X11INC}
+-LIBS = -L/usr/lib -lc -lcrypt -L${X11LIB} -lX11 -lXext -lXrandr
++INCS = -I. -I/usr/include -I${X11INC} -I${FREETYPEINC}
++LIBS = -L/usr/lib -lc -lcrypt -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS} -lXext -lXrandr
+ 
+ # flags
+-CPPFLAGS = -DVERSION=\"${VERSION}\" -D_DEFAULT_SOURCE -DHAVE_SHADOW_H
++CPPFLAGS = -DVERSION=\"${VERSION}\" -D_DEFAULT_SOURCE -DHAVE_SHADOW_H ${XINERAMAFLAGS}
+ CFLAGS = -std=c99 -pedantic -Wall -Os ${INCS} ${CPPFLAGS}
+ LDFLAGS = -s ${LIBS}
+ COMPATSRC = explicit_bzero.c
+Only in slock: explicit_bzero.o
+Only in slock: patches
+Only in slock: slock
+diff -up slock_git_copy/slock.1 slock/slock.1
+--- slock_git_copy/slock.1	2022-09-13 21:47:48.959198392 -0400
++++ slock/slock.1	2022-09-13 21:51:40.343695489 -0400
+@@ -6,6 +6,8 @@
+ .Sh SYNOPSIS
+ .Nm
+ .Op Fl v
++.Op Fl f
++.Op Fl m Ar message
+ .Op Ar cmd Op Ar arg ...
+ .Sh DESCRIPTION
+ .Nm
+@@ -16,6 +18,11 @@ is executed after the screen has been lo
+ .Bl -tag -width Ds
+ .It Fl v
+ Print version information to stdout and exit.
++.It Fl f
++List all valid X fonts and exit.
++.It Fl m Ar message
++Overrides default slock lock message.
++.TP
+ .El
+ .Sh SECURITY CONSIDERATIONS
+ To make sure a locked screen can not be bypassed by switching VTs
+diff -up slock_git_copy/slock.c slock/slock.c
+--- slock_git_copy/slock.c	2022-09-13 21:47:48.959198392 -0400
++++ slock/slock.c	2022-09-13 21:55:23.328143838 -0400
+@@ -1,5 +1,6 @@
+ /* See LICENSE file for license details. */
+-#define _XOPEN_SOURCE 500
++#define _XOPEN_SOURCE   500
++#define LENGTH(X)       (sizeof X / sizeof X[0])
+ #if HAVE_SHADOW_H
+ #include <shadow.h>
+ #endif
+@@ -15,27 +16,41 @@
+ #include <unistd.h>
+ #include <sys/types.h>
+ #include <X11/extensions/Xrandr.h>
++#include <X11/extensions/Xinerama.h>
++#include <X11/extensions/dpms.h>
+ #include <X11/keysym.h>
+ #include <X11/Xlib.h>
+ #include <X11/Xutil.h>
++#include <X11/Xft/Xft.h>
+ 
+ #include "arg.h"
+ #include "util.h"
+ 
+ char *argv0;
+ 
++/* global count to prevent repeated error messages */
++int count_error = 0;
++
+ enum {
++	BACKGROUND,
+ 	INIT,
+ 	INPUT,
+ 	FAILED,
+ 	NUMCOLS
+ };
+ 
++#include "config.h"
++
+ struct lock {
+ 	int screen;
+ 	Window root, win;
+ 	Pixmap pmap;
+ 	unsigned long colors[NUMCOLS];
++	unsigned int x, y;
++	unsigned int xoff, yoff, mw, mh;
++	Drawable drawable;
++	GC gc;
++	XRectangle rectangles[LENGTH(rectangles)];
+ };
+ 
+ struct xrandr {
+@@ -44,8 +59,6 @@ struct xrandr {
+ 	int errbase;
+ };
+ 
+-#include "config.h"
+-
+ static void
+ die(const char *errstr, ...)
+ {
+@@ -83,6 +96,98 @@ dontkillme(void)
+ }
+ #endif
+ 
++static void
++writemessage(Display *dpy, Window win, int screen)
++{
++	int len, line_len, width, height, s_width, s_height, i, j, k, tab_replace, tab_size;
++	XGCValues gr_values;
++	XFontStruct *fontinfo;
++	XColor color, dummy;
++	XineramaScreenInfo *xsi;
++	GC gc;
++	fontinfo = XLoadQueryFont(dpy, font_name);
++
++	if (fontinfo == NULL) {
++		if (count_error == 0) {
++			fprintf(stderr, "slock: Unable to load font \"%s\"\n", font_name);
++			fprintf(stderr, "slock: Try listing fonts with 'slock -f'\n");
++			count_error++;
++		}
++		return;
++	}
++
++	tab_size = 8 * XTextWidth(fontinfo, " ", 1);
++
++	XAllocNamedColor(dpy, DefaultColormap(dpy, screen),
++		 text_color, &color, &dummy);
++
++	gr_values.font = fontinfo->fid;
++	gr_values.foreground = color.pixel;
++	gc=XCreateGC(dpy,win,GCFont+GCForeground, &gr_values);
++
++	/*  To prevent "Uninitialized" warnings. */
++	xsi = NULL;
++
++	/*
++	 * Start formatting and drawing text
++	 */
++
++	len = strlen(message);
++
++	/* Max max line length (cut at '\n') */
++	line_len = 0;
++	k = 0;
++	for (i = j = 0; i < len; i++) {
++		if (message[i] == '\n') {
++			if (i - j > line_len)
++				line_len = i - j;
++			k++;
++			i++;
++			j = i;
++		}
++	}
++	/* If there is only one line */
++	if (line_len == 0)
++		line_len = len;
++
++	if (XineramaIsActive(dpy)) {
++		xsi = XineramaQueryScreens(dpy, &i);
++		s_width = xsi[0].width;
++		s_height = xsi[0].height;
++	} else {
++		s_width = DisplayWidth(dpy, screen);
++		s_height = DisplayHeight(dpy, screen);
++	}
++
++	height = s_height*3/7 - (k*20)/3;
++	width  = (s_width - XTextWidth(fontinfo, message, line_len))/2;
++
++	/* Look for '\n' and print the text between them. */
++	for (i = j = k = 0; i <= len; i++) {
++		/* i == len is the special case for the last line */
++		if (i == len || message[i] == '\n') {
++			tab_replace = 0;
++			while (message[j] == '\t' && j < i) {
++				tab_replace++;
++				j++;
++			}
++
++			XDrawString(dpy, win, gc, x_offset + width + tab_size*tab_replace, y_offset + height + 20*k, message + j, i - j);
++			while (i < len && message[i] == '\n') {
++				i++;
++				j = i;
++				k++;
++			}
++		}
++	}
++
++	/* xsi should not be NULL anyway if Xinerama is active, but to be safe */
++	if (XineramaIsActive(dpy) && xsi != NULL)
++			XFree(xsi);
++}
++
++
++
+ static const char *
+ gethash(void)
+ {
+@@ -125,6 +230,32 @@ gethash(void)
+ }
+ 
+ static void
++resizerectangles(struct lock *lock)
++{
++	int i;
++
++	for (i = 0; i < LENGTH(rectangles); i++){
++		lock->rectangles[i].x = (rectangles[i].x * logosize)
++                                + lock->xoff + ((lock->mw) / 2) - (logow / 2 * logosize);
++		lock->rectangles[i].y = (rectangles[i].y * logosize)
++                                + lock->yoff + ((lock->mh) / 2) - (logoh / 2 * logosize);
++		lock->rectangles[i].width = rectangles[i].width * logosize;
++		lock->rectangles[i].height = rectangles[i].height * logosize;
++	}
++}
++
++static void
++drawlogo(Display *dpy, struct lock *lock, int color)
++{
++	XSetForeground(dpy, lock->gc, lock->colors[BACKGROUND]);
++	XFillRectangle(dpy, lock->drawable, lock->gc, 0, 0, lock->x, lock->y);
++	XSetForeground(dpy, lock->gc, lock->colors[color]);
++	XFillRectangles(dpy, lock->drawable, lock->gc, lock->rectangles, LENGTH(rectangles));
++	XCopyArea(dpy, lock->drawable, lock->win, lock->gc, 0, 0, lock->x, lock->y, 0, 0);
++	XSync(dpy, False);
++}
++
++static void
+ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
+        const char *hash)
+ {
+@@ -190,10 +321,8 @@ readpw(Display *dpy, struct xrandr *rr,
+ 			color = len ? INPUT : ((failure || failonclear) ? FAILED : INIT);
+ 			if (running && oldc != color) {
+ 				for (screen = 0; screen < nscreens; screen++) {
+-					XSetWindowBackground(dpy,
+-					                     locks[screen]->win,
+-					                     locks[screen]->colors[color]);
+-					XClearWindow(dpy, locks[screen]->win);
++					drawlogo(dpy, locks[screen], color);
++					writemessage(dpy, locks[screen]->win, screen);
+ 				}
+ 				oldc = color;
+ 			}
+@@ -228,6 +357,10 @@ lockscreen(Display *dpy, struct xrandr *
+ 	XColor color, dummy;
+ 	XSetWindowAttributes wa;
+ 	Cursor invisible;
++#ifdef XINERAMA
++	XineramaScreenInfo *info;
++	int n;
++#endif
+ 
+ 	if (dpy == NULL || screen < 0 || !(lock = malloc(sizeof(struct lock))))
+ 		return NULL;
+@@ -241,12 +374,31 @@ lockscreen(Display *dpy, struct xrandr *
+ 		lock->colors[i] = color.pixel;
+ 	}
+ 
++	lock->x = DisplayWidth(dpy, lock->screen);
++	lock->y = DisplayHeight(dpy, lock->screen);
++#ifdef XINERAMA
++	if ((info = XineramaQueryScreens(dpy, &n))) {
++		lock->xoff = info[0].x_org;
++		lock->yoff = info[0].y_org;
++		lock->mw = info[0].width;
++		lock->mh = info[0].height;
++	} else
++#endif
++	{
++		lock->xoff = lock->yoff = 0;
++		lock->mw = lock->x;
++		lock->mh = lock->y;
++	}
++	lock->drawable = XCreatePixmap(dpy, lock->root,
++            lock->x, lock->y, DefaultDepth(dpy, screen));
++	lock->gc = XCreateGC(dpy, lock->root, 0, NULL);
++	XSetLineAttributes(dpy, lock->gc, 1, LineSolid, CapButt, JoinMiter);
++
+ 	/* init */
+ 	wa.override_redirect = 1;
+-	wa.background_pixel = lock->colors[INIT];
++	wa.background_pixel = lock->colors[BACKGROUND];
+ 	lock->win = XCreateWindow(dpy, lock->root, 0, 0,
+-	                          DisplayWidth(dpy, lock->screen),
+-	                          DisplayHeight(dpy, lock->screen),
++	                          lock->x, lock->y,
+ 	                          0, DefaultDepth(dpy, lock->screen),
+ 	                          CopyFromParent,
+ 	                          DefaultVisual(dpy, lock->screen),
+@@ -256,6 +408,8 @@ lockscreen(Display *dpy, struct xrandr *
+ 	                                &color, &color, 0, 0);
+ 	XDefineCursor(dpy, lock->win, invisible);
+ 
++	resizerectangles(lock);
++
+ 	/* Try to grab mouse pointer *and* keyboard for 600ms, else fail the lock */
+ 	for (i = 0, ptgrab = kbgrab = -1; i < 6; i++) {
+ 		if (ptgrab != GrabSuccess) {
+@@ -276,6 +430,7 @@ lockscreen(Display *dpy, struct xrandr *
+ 				XRRSelectInput(dpy, lock->win, RRScreenChangeNotifyMask);
+ 
+ 			XSelectInput(dpy, lock->root, SubstructureNotifyMask);
++			drawlogo(dpy, lock, INIT);
+ 			return lock;
+ 		}
+ 
+@@ -300,7 +455,7 @@ lockscreen(Display *dpy, struct xrandr *
+ static void
+ usage(void)
+ {
+-	die("usage: slock [-v] [cmd [arg ...]]\n");
++	die("usage: slock [-v] [-f] [-m message] [cmd [arg ...]]\n");
+ }
+ 
+ int
+@@ -313,12 +468,26 @@ main(int argc, char **argv) {
+ 	gid_t dgid;
+ 	const char *hash;
+ 	Display *dpy;
+-	int s, nlocks, nscreens;
++	int i, s, nlocks, nscreens;
++	CARD16 standby, suspend, off;
++	int count_fonts;
++	char **font_names;
+ 
+ 	ARGBEGIN {
+ 	case 'v':
+ 		fprintf(stderr, "slock-"VERSION"\n");
+ 		return 0;
++	case 'm':
++		message = EARGF(usage());
++		break;
++	case 'f':
++		if (!(dpy = XOpenDisplay(NULL)))
++			die("slock: cannot open display\n");
++		font_names = XListFonts(dpy, "*", 10000 /* list 10000 fonts*/, &count_fonts);
++		for (i=0; i<count_fonts; i++) {
++			fprintf(stderr, "%s\n", *(font_names+i));
++		}
++		return 0;
+ 	default:
+ 		usage();
+ 	} ARGEND
+@@ -363,10 +532,12 @@ main(int argc, char **argv) {
+ 	if (!(locks = calloc(nscreens, sizeof(struct lock *))))
+ 		die("slock: out of memory\n");
+ 	for (nlocks = 0, s = 0; s < nscreens; s++) {
+-		if ((locks[s] = lockscreen(dpy, &rr, s)) != NULL)
++		if ((locks[s] = lockscreen(dpy, &rr, s)) != NULL) {
++			writemessage(dpy, locks[s]->win, s);
+ 			nlocks++;
+-		else
++		} else {
+ 			break;
++		}
+ 	}
+ 	XSync(dpy, 0);
+ 
+@@ -374,6 +545,20 @@ main(int argc, char **argv) {
+ 	if (nlocks != nscreens)
+ 		return 1;
+ 
++	/* DPMS magic to disable the monitor */
++	if (!DPMSCapable(dpy))
++		die("slock: DPMSCapable failed\n");
++	if (!DPMSEnable(dpy))
++		die("slock: DPMSEnable failed\n");
++	if (!DPMSGetTimeouts(dpy, &standby, &suspend, &off))
++		die("slock: DPMSGetTimeouts failed\n");
++	if (!standby || !suspend || !off)
++		die("slock: at least one DPMS variable is zero\n");
++	if (!DPMSSetTimeouts(dpy, monitortime, monitortime, monitortime))
++		die("slock: DPMSSetTimeouts failed\n");
++
++	XSync(dpy, 0);
++
+ 	/* run post-lock command */
+ 	if (argc > 0) {
+ 		switch (fork()) {
+@@ -391,5 +576,16 @@ main(int argc, char **argv) {
+ 	/* everything is now blank. Wait for the correct password */
+ 	readpw(dpy, &rr, locks, nscreens, hash);
+ 
++	/* reset DPMS values to inital ones */
++	DPMSSetTimeouts(dpy, standby, suspend, off);
++	XSync(dpy, 0);
++
++	for (nlocks = 0, s = 0; s < nscreens; s++) {
++		XFreePixmap(dpy, locks[s]->drawable);
++		XFreeGC(dpy, locks[s]->gc);
++	}
++
++	XSync(dpy, 0);
++	XCloseDisplay(dpy);
+ 	return 0;
+ }
+Only in slock: slock.o

@@ -469,9 +469,9 @@ main(int argc, char **argv) {
 	const char *hash;
 	Display *dpy;
 	int i, s, nlocks, nscreens;
+	CARD16 standby, suspend, off;
 	int count_fonts;
 	char **font_names;
-	CARD16 standby, suspend, off;
 
 	ARGBEGIN {
 	case 'v':
@@ -576,13 +576,14 @@ main(int argc, char **argv) {
 	/* everything is now blank. Wait for the correct password */
 	readpw(dpy, &rr, locks, nscreens, hash);
 
+	/* reset DPMS values to inital ones */
+	DPMSSetTimeouts(dpy, standby, suspend, off);
+	XSync(dpy, 0);
+
 	for (nlocks = 0, s = 0; s < nscreens; s++) {
 		XFreePixmap(dpy, locks[s]->drawable);
 		XFreeGC(dpy, locks[s]->gc);
 	}
-
-	/* reset DPMS values to initial ones */
-	DPMSSetTimeouts(dpy, standby, suspend, off);
 
 	XSync(dpy, 0);
 	XCloseDisplay(dpy);

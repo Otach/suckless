@@ -3,6 +3,7 @@
 **/*.o
 !dwm/config.h
 !dmenu/config.h
+!slock/config.h
 
 # dmenu files to ignore
 dmenu/dmenu

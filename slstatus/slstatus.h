@@ -56,6 +56,9 @@ const char *ram_used(void);
 /* run_command */
 const char *run_command(const char *cmd);
 
+/* separator */
+const char *separator(const char *separator);
+
 /* swap */
 const char *swap_free(void);
 const char *swap_perc(void);
@@ -75,7 +78,6 @@ const char *uid(void);
 
 /* volume */
 const char *vol_perc(const char *card);
-const char *get_volume(void);
 
 /* wifi */
 const char *wifi_perc(const char *interface);

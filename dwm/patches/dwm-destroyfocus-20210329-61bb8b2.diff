@@ -1,4 +1,4 @@
-diff --git dwm.c dwm.c
+diff --git a/dwm.c b/dwm.c
 index 5e4d494..bdb1446 100644
 --- dwm.c
 +++ dwm.c

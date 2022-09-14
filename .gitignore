@@ -2,6 +2,7 @@
 **/config.h
 **/*.o
 !dwm/config.h
+!dmenu/config.h
 
 # dmenu files to ignore
 dmenu/dmenu

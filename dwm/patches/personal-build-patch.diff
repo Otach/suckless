@@ -1,9 +1,11 @@
 diff -up dwm_git/config.def.h dwm/config.def.h
---- dwm_git/config.def.h	2022-09-13 21:31:04.097736485 -0400
-+++ dwm/config.def.h	2022-09-13 20:57:43.541484397 -0400
-@@ -3,8 +3,14 @@
+--- dwm_git/config.def.h	2022-09-14 13:31:33.086155763 -0400
++++ dwm/config.def.h	2022-09-14 13:19:28.869301771 -0400
+@@ -2,9 +2,16 @@
+ 
  /* appearance */
  static const unsigned int borderpx  = 1;        /* border pixel of windows */
++static const unsigned int gappx     = 1;        /* gap pixel between windows */
  static const unsigned int snap      = 32;       /* snap pixel */
 +static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 +static const unsigned int systrayspacing = 2;   /* systray spacing */
@@ -16,7 +18,7 @@ diff -up dwm_git/config.def.h dwm/config.def.h
  static const char *fonts[]          = { "monospace:size=10" };
  static const char dmenufont[]       = "monospace:size=10";
  static const char col_gray1[]       = "#222222";
-@@ -16,6 +22,8 @@ static const char *colors[][3]      = {
+@@ -16,6 +23,8 @@ static const char *colors[][3]      = {
  	/*               fg         bg         border   */
  	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
  	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
@@ -25,7 +27,7 @@ diff -up dwm_git/config.def.h dwm/config.def.h
  };
  
  /* tagging */
-@@ -46,11 +54,15 @@ static const Layout layouts[] = {
+@@ -46,11 +55,15 @@ static const Layout layouts[] = {
  
  /* key definitions */
  #define MODKEY Mod1Mask
@@ -42,7 +44,7 @@ diff -up dwm_git/config.def.h dwm/config.def.h
  
  /* helper for spawning shell commands in the pre dwm-5.0 fashion */
  #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
-@@ -64,6 +76,8 @@ static const Key keys[] = {
+@@ -64,6 +77,8 @@ static const Key keys[] = {
  	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
  	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
  	{ MODKEY,                       XK_b,      togglebar,      {0} },
@@ -51,7 +53,7 @@ diff -up dwm_git/config.def.h dwm/config.def.h
  	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
  	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
  	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-@@ -94,6 +108,7 @@ static const Key keys[] = {
+@@ -94,6 +109,7 @@ static const Key keys[] = {
  	TAGKEYS(                        XK_8,                      7)
  	TAGKEYS(                        XK_9,                      8)
  	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
@@ -60,14 +62,15 @@ diff -up dwm_git/config.def.h dwm/config.def.h
  
  /* button definitions */
 diff -up dwm_git/config.h dwm/config.h
---- dwm_git/config.h	2022-09-13 21:30:28.997578722 -0400
-+++ dwm/config.h	2022-09-13 21:16:14.323759653 -0400
-@@ -1,47 +1,68 @@
+--- dwm_git/config.h	2022-09-14 13:31:22.159435842 -0400
++++ dwm/config.h	2022-09-14 13:25:51.714493928 -0400
+@@ -1,47 +1,70 @@
  /* See LICENSE file for copyright and license details. */
  
  /* appearance */
 -static const unsigned int borderpx  = 1;        /* border pixel of windows */
 +static const unsigned int borderpx  = 2;        /* border pixel of windows */
++static const unsigned int gappx     = 4;        /* gap pixel between windows */
  static const unsigned int snap      = 32;       /* snap pixel */
 +static const unsigned int systraypinning = 1;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 +static const unsigned int systrayspacing = 2;   /* systray spacing */
@@ -77,19 +80,19 @@ diff -up dwm_git/config.h dwm/config.h
  static const int topbar             = 1;        /* 0 means bottom bar */
 -static const char *fonts[]          = { "monospace:size=10" };
 -static const char dmenufont[]       = "monospace:size=10";
-+static const char *fonts[]          = { "Hack Nerd Font:size=12" };
-+static const char dmenufont[]       = "Hack Nerd Font:size=12";
++static const char *fonts[]          = { "Hack Nerd Font:size=12:antialias=true:autohint=true" };
++static const char dmenufont[]       = "Hack Nerd Font:size=12:antialias=true:autohint=true";
  static const char col_gray1[]       = "#222222";
  static const char col_gray2[]       = "#444444";
 -static const char col_gray3[]       = "#bbbbbb";
 -static const char col_gray4[]       = "#eeeeee";
--static const char col_cyan[]        = "#005577";
 +static const char col_gray3[]       = "#666666";
 +static const char col_gray4[]       = "#bbbbbb";
 +static const char col_gray5[]       = "#eeeeee";
 +static const char col_red[]         = "#dd0000";
 +static const char col_black[]       = "#000000";
 +static const char col_white[]       = "#ffffff";
+ static const char col_cyan[]        = "#005577";
 +static const char run_application_preferences[] = "lxappearance,firefox-developer-edition,pavucontrol,thunar,thunderbird,nvidia-setting,smerge,subl,virt-manager,discord,evince,designer-qt5,libreoffice,anydesk,obsidian";
  static const char *colors[][3]      = {
 -	/*               fg         bg         border   */
@@ -98,7 +101,7 @@ diff -up dwm_git/config.h dwm/config.h
 +    /*               fg         bg         border   */
 +    //[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
 +    [SchemeNorm] = { col_gray4, col_black, col_black },
-+    [SchemeSel] = { col_white, col_black, NULL }, // Currently selected tag
++    [SchemeSel] = { col_white, col_black, col_cyan }, // Currently selected tag
 +    [SchemeTag] = { col_gray1, col_black, NULL }, // Not selected tags
 +    [SchemeApp] = { col_gray3, col_black, NULL }, // Not Selected tag with Apps
  };
@@ -152,7 +155,7 @@ diff -up dwm_git/config.h dwm/config.h
  };
  
  /* key definitions */
-@@ -52,48 +73,186 @@ static const Layout layouts[] = {
+@@ -52,48 +75,186 @@ static const Layout layouts[] = {
  	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
  	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
  
@@ -377,7 +380,7 @@ diff -up dwm_git/config.h dwm/config.h
  
  /* button definitions */
 diff -up dwm_git/config.mk dwm/config.mk
---- dwm_git/config.mk	2022-09-13 21:31:04.097736485 -0400
+--- dwm_git/config.mk	2022-09-14 13:31:33.086155763 -0400
 +++ dwm/config.mk	2022-09-13 20:40:45.096543494 -0400
 @@ -23,7 +23,7 @@ FREETYPEINC = /usr/include/freetype2
  
@@ -389,7 +392,7 @@ diff -up dwm_git/config.mk dwm/config.mk
  # flags
  CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS}
 diff -up dwm_git/drw.c dwm/drw.c
---- dwm_git/drw.c	2022-09-13 21:31:04.097736485 -0400
+--- dwm_git/drw.c	2022-09-14 13:31:33.086155763 -0400
 +++ dwm/drw.c	2022-09-13 20:40:45.096543494 -0400
 @@ -4,6 +4,7 @@
  #include <string.h>
@@ -510,7 +513,7 @@ diff -up dwm_git/drw.c dwm/drw.c
  {
  	if (!drw)
 diff -up dwm_git/drw.h dwm/drw.h
---- dwm_git/drw.h	2022-09-13 21:31:04.097736485 -0400
+--- dwm_git/drw.h	2022-09-14 13:31:33.086155763 -0400
 +++ dwm/drw.h	2022-09-13 20:40:45.096543494 -0400
 @@ -21,6 +21,7 @@ typedef struct {
  	int screen;
@@ -536,7 +539,7 @@ diff -up dwm_git/drw.h dwm/drw.h
 Only in dwm: drw.o
 Only in dwm: dwm
 diff -up dwm_git/dwm.1 dwm/dwm.1
---- dwm_git/dwm.1	2022-09-13 21:31:04.097736485 -0400
+--- dwm_git/dwm.1	2022-09-14 13:31:33.086155763 -0400
 +++ dwm/dwm.1	2022-09-13 19:46:40.649137245 -0400
 @@ -142,6 +142,9 @@ Add/remove all windows with nth tag to/f
  .TP
@@ -563,8 +566,8 @@ diff -up dwm_git/dwm.1 dwm/dwm.1
  .BR dmenu (1),
  .BR st (1)
 diff -up dwm_git/dwm.c dwm/dwm.c
---- dwm_git/dwm.c	2022-09-13 21:31:04.097736485 -0400
-+++ dwm/dwm.c	2022-09-13 21:04:05.539981173 -0400
+--- dwm_git/dwm.c	2022-09-14 13:31:33.086155763 -0400
++++ dwm/dwm.c	2022-09-14 13:23:12.013717937 -0400
 @@ -28,6 +28,8 @@
  #include <stdlib.h>
  #include <string.h>
@@ -1481,7 +1484,7 @@ diff -up dwm_git/dwm.c dwm/dwm.c
  		focus(NULL);
  		arrange(selmon);
  	}
-@@ -1667,6 +2097,14 @@ tagmon(const Arg *arg)
+@@ -1667,9 +2097,17 @@ tagmon(const Arg *arg)
  }
  
  void
@@ -1495,8 +1498,41 @@ diff -up dwm_git/dwm.c dwm/dwm.c
 +void
  tile(Monitor *m)
  {
- 	unsigned int i, n, h, mw, my, ty;
-@@ -1699,7 +2137,18 @@ togglebar(const Arg *arg)
+-	unsigned int i, n, h, mw, my, ty;
++	unsigned int i, n, h, r, g = 0, mw, my, ty;
+ 	Client *c;
+ 
+ 	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+@@ -1677,20 +2115,22 @@ tile(Monitor *m)
+ 		return;
+ 
+ 	if (n > m->nmaster)
+-		mw = m->nmaster ? m->ww * m->mfact : 0;
++		mw = m->nmaster ? (m->ww - (g = gappx)) * m->mfact : 0;
+ 	else
+ 		mw = m->ww;
+ 	for (i = my = ty = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
+ 		if (i < m->nmaster) {
+-			h = (m->wh - my) / (MIN(n, m->nmaster) - i);
++			r = MIN(n, m->nmaster) - i;
++			h = (m->wh - my - gappx * (r - 1)) / r;
+ 			resize(c, m->wx, m->wy + my, mw - (2*c->bw), h - (2*c->bw), 0);
+ 			if (my + HEIGHT(c) < m->wh)
+-				my += HEIGHT(c);
++				my += HEIGHT(c) + gappx;
+ 		} else {
+-			h = (m->wh - ty) / (n - i);
+-			resize(c, m->wx + mw, m->wy + ty, m->ww - mw - (2*c->bw), h - (2*c->bw), 0);
++			r = n - i;
++			h = (m->wh - ty - gappx * (r - 1)) / r;
++			resize(c, m->wx + mw + g, m->wy + ty, m->ww - mw - g - (2*c->bw), h - (2*c->bw), 0);
+ 			if (ty + HEIGHT(c) < m->wh)
+-				ty += HEIGHT(c);
++				ty += HEIGHT(c) + gappx;
+ 		}
+ }
+ 
+@@ -1699,7 +2139,18 @@ togglebar(const Arg *arg)
  {
  	selmon->showbar = !selmon->showbar;
  	updatebarpos(selmon);
@@ -1516,7 +1552,7 @@ diff -up dwm_git/dwm.c dwm/dwm.c
  	arrange(selmon);
  }
  
-@@ -1727,6 +2176,7 @@ toggletag(const Arg *arg)
+@@ -1727,6 +2178,7 @@ toggletag(const Arg *arg)
  	newtags = selmon->sel->tags ^ (arg->ui & TAGMASK);
  	if (newtags) {
  		selmon->sel->tags = newtags;
@@ -1524,7 +1560,7 @@ diff -up dwm_git/dwm.c dwm/dwm.c
  		focus(NULL);
  		arrange(selmon);
  	}
-@@ -1745,6 +2195,15 @@ toggleview(const Arg *arg)
+@@ -1745,6 +2197,15 @@ toggleview(const Arg *arg)
  }
  
  void
@@ -1540,7 +1576,7 @@ diff -up dwm_git/dwm.c dwm/dwm.c
  unfocus(Client *c, int setfocus)
  {
  	if (!c)
-@@ -1765,6 +2224,7 @@ unmanage(Client *c, int destroyed)
+@@ -1765,6 +2226,7 @@ unmanage(Client *c, int destroyed)
  
  	detach(c);
  	detachstack(c);
@@ -1548,7 +1584,7 @@ diff -up dwm_git/dwm.c dwm/dwm.c
  	if (!destroyed) {
  		wc.border_width = c->oldbw;
  		XGrabServer(dpy); /* avoid race conditions */
-@@ -1778,7 +2238,7 @@ unmanage(Client *c, int destroyed)
+@@ -1778,7 +2240,7 @@ unmanage(Client *c, int destroyed)
  		XUngrabServer(dpy);
  	}
  	free(c);
@@ -1557,7 +1593,7 @@ diff -up dwm_git/dwm.c dwm/dwm.c
  	updateclientlist();
  	arrange(m);
  }
-@@ -1795,11 +2255,18 @@ unmapnotify(XEvent *e)
+@@ -1795,11 +2257,18 @@ unmapnotify(XEvent *e)
  		else
  			unmanage(c, 0);
  	}
@@ -1576,7 +1612,7 @@ diff -up dwm_git/dwm.c dwm/dwm.c
  	Monitor *m;
  	XSetWindowAttributes wa = {
  		.override_redirect = True,
-@@ -1810,10 +2277,15 @@ updatebars(void)
+@@ -1810,10 +2279,15 @@ updatebars(void)
  	for (m = mons; m; m = m->next) {
  		if (m->barwin)
  			continue;
@@ -1593,7 +1629,7 @@ diff -up dwm_git/dwm.c dwm/dwm.c
  		XMapRaised(dpy, m->barwin);
  		XSetClassHint(dpy, m->barwin, &ch);
  	}
-@@ -1987,9 +2459,126 @@ updatesizehints(Client *c)
+@@ -1987,9 +2461,126 @@ updatesizehints(Client *c)
  void
  updatestatus(void)
  {
@@ -1721,7 +1757,7 @@ diff -up dwm_git/dwm.c dwm/dwm.c
  }
  
  void
-@@ -2002,6 +2591,13 @@ updatetitle(Client *c)
+@@ -2002,6 +2593,13 @@ updatetitle(Client *c)
  }
  
  void
@@ -1735,7 +1771,7 @@ diff -up dwm_git/dwm.c dwm/dwm.c
  updatewindowtype(Client *c)
  {
  	Atom state = getatomprop(c, netatom[NetWMState]);
-@@ -2057,6 +2653,16 @@ wintoclient(Window w)
+@@ -2057,6 +2655,16 @@ wintoclient(Window w)
  	return NULL;
  }
  
@@ -1752,7 +1788,7 @@ diff -up dwm_git/dwm.c dwm/dwm.c
  Monitor *
  wintomon(Window w)
  {
-@@ -2110,16 +2716,57 @@ xerrorstart(Display *dpy, XErrorEvent *e
+@@ -2110,16 +2718,57 @@ xerrorstart(Display *dpy, XErrorEvent *e
  	return -1;
  }
  
@@ -1813,7 +1849,7 @@ diff -up dwm_git/dwm.c dwm/dwm.c
  }
  
  int
-@@ -2141,6 +2788,7 @@ main(int argc, char *argv[])
+@@ -2141,6 +2790,7 @@ main(int argc, char *argv[])
  #endif /* __OpenBSD__ */
  	scan();
  	run();
@@ -1822,7 +1858,6 @@ diff -up dwm_git/dwm.c dwm/dwm.c
  	XCloseDisplay(dpy);
  	return EXIT_SUCCESS;
 Only in dwm: dwm.o
-Only in dwm_git: .git
 Only in dwm: patches
 Only in dwm: scripts
 Only in dwm: util.o

@@ -51,7 +51,7 @@ static const Rule rules[] = {
     { "Sublime_text",               "sublime_text",  NULL,                                   0,            0,            0 },
     { "Sublime_merge",              "sublime_merge", NULL,                                   1 << 1,       0,            0 },
     { "discord",                    "discord",       NULL,                                   1 << 2,       0,            1 },
-    { "obs",                        "obs",           NULL,                                   1 << 2,       0,            3 }
+    { "obsidian",                   "obsidian",      NULL,                                   1 << 8,       0,           -1 },
 };
 
 /* layout(s) */

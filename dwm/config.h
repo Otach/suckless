@@ -243,7 +243,7 @@ static Key keys[] = {
     { MODKEY|ShiftMask,             XK_Right,   tagnthmon,      {.i = 3 } },
     { MODKEY,                       XK_space,   spawn,          {.v = dunst_close } },
     { MODKEY|ShiftMask,             XK_grave,   spawn,          {.v = dunst_closeall } },
-    { ControlMask,                  XK_grave,   spawn,          {.v = dunst_history } },
+    { MODKEY,                       XK_grave,   spawn,          {.v = dunst_history } },
     TAGKEYS(                        XK_1,                       0)
     TAGKEYS(                        XK_2,                       1)
     TAGKEYS(                        XK_3,                       2)

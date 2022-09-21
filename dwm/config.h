@@ -50,7 +50,7 @@ static const Rule rules[] = {
     { "Thunderbird",                "Calendar",      NULL,                                   1 << 1,       1,            1 },
     { "Sublime_text",               "sublime_text",  NULL,                                   0,            0,            0 },
     { "Sublime_merge",              "sublime_merge", NULL,                                   1 << 1,       0,            0 },
-    { "discord",                    "discord",       NULL,                                   1 << 2,       0,            1 },
+    { "discord",                    "discord",       NULL,                                   1 << 3,       0,            1 },
     { "obsidian",                   "obsidian",      NULL,                                   1 << 8,       0,           -1 },
 };
 

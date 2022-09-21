@@ -38,7 +38,8 @@ choice=$(printf '%s\n' "${!options_clean[@]}" | sort | dmenu -nb '#222222' -nf '
 # What to do when/if we choose a file to edit.
 if [ "$choice" ]; then
   cfg=$(printf '%s\n' "${options_clean["${choice}"]}")
-  st nvim "$cfg"
+  # st nvim "$cfg"
+  subl "$cfg"
 
 # What to do if we just escape without choosing anything.
 else

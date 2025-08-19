@@ -35,6 +35,7 @@ static const char *colors[][3]      = {
 
 #define ICONSIZE (bh - 2)
 #define ICONSPACING 5
+static const int showicons = 0;  /* 0 means no icons in tags shown by default */
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
@@ -182,7 +183,7 @@ static const char *awfulmc_next[]   = { "sh", "/home/mason/suckless/dwm/scripts/
 //W - Firefox Private Browser
 //x - lxappearance
 //X
-//y
+//y - Toggle show icons
 //Y
 //z - pavucontrol
 //Z
@@ -200,6 +201,7 @@ static Key keys[] = {
     { MODKEY,                           -1,            XK_u,            spawn,          {.v = mntwrkshare } },
     { MODKEY|ShiftMask,                 -1,            XK_u,            spawn,          {.v = untwrkshare } },
     { MODKEY,                           -1,            XK_b,            togglebar,      {0} },
+    { MODKEY,                           -1,            XK_y,            toggleicons,    {0} },
     { MODKEY|ShiftMask,                 -1,            XK_j,            rotatestack,    {.i = +1 } },
     { MODKEY|ShiftMask,                 -1,            XK_k,            rotatestack,    {.i = -1 } },
     { MODKEY,                           -1,            XK_j,            focusstack,     {.i = +1 } },

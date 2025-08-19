@@ -115,7 +115,8 @@ struct Client {
 	int bw, oldbw;
 	unsigned int tags;
 	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen, floatingIgnoreCenter;
-	unsigned int icw, ich; Picture icon;
+	unsigned int icw, ich;
+	Picture icon;
 	Client *next;
 	Client *snext;
 	Monitor *mon;
@@ -148,6 +149,7 @@ struct Monitor {
 	unsigned int tagset[2];
 	int showbar;
 	int topbar;
+	int showicons;
 	Client *clients;
 	Client *sel;
 	Client *stack;
@@ -260,6 +262,7 @@ static void tagnthmon(const Arg *arg);
 static void tile(Monitor *m);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
+static void toggleicons(const Arg *arg);
 static void toggletag(const Arg *arg);
 static void toggleview(const Arg *arg);
 static void freeicon(Client *c);
@@ -765,6 +768,7 @@ createmon(void)
 	m->nmaster = nmaster;
 	m->showbar = showbar;
 	m->topbar = topbar;
+	m->showicons = showicons;
 	m->lt[0] = &layouts[0];
 	m->lt[1] = &layouts[1 % LENGTH(layouts)];
 	strncpy(m->ltsymbol, layouts[0].symbol, sizeof m->ltsymbol);
@@ -839,7 +843,7 @@ numtomon(int num)
 void
 drawbar(Monitor *m)
 {
-	int x, w, tw = 0, stw = 0, kctw = 0;
+	int x, w, tw = 0, stw = 0, kctw = 0, icw = 0;
 	int boxs = drw->fonts->h / 9;
 	int boxw = drw->fonts->h / 6 + 2;
 	unsigned int i, occ = 0, urg = 0;
@@ -872,6 +876,8 @@ drawbar(Monitor *m)
 		if (c->isurgent)
 			urg |= c->tags;
 	}
+
+	// Draw Tags
 	x = 0;
 	for (i = 0; i < LENGTH(tags); i++) {
 		w = TEXTW(tags[i]);
@@ -882,24 +888,47 @@ drawbar(Monitor *m)
 			drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeTag]);
 
 		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
-		if (occ & 1 << i)
+		if (occ & 1 << i) {
 			drw_rect(drw, x + boxs, boxs, boxw, boxw,
 				m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
 				urg & 1 << i);
 
+			if (m->showicons) {
+				// Draw icons of clients within the tag
+				icw = 0;
+				for (c = m->clients; c; c = c->next) {
+					if (c->icon == None)
+						continue;
+
+					if (c->tags & 1 << i) {
+						// Draw a black rectangle underneath the image
+						drw_setscheme(drw, scheme[SchemeNorm]);
+						drw_rect(drw, x + w + icw, 0, c->icw + (lrpad / 2), bh, 1, 1);
+						// drw_rect(drw, x + w + icw, 0, c->icw, bh, 1, 1);
+						drw_pic(drw, x + w + icw, (bh - c->ich) / 2, c->icw, c->ich, c->icon);
+						icw += c->icw + (lrpad / 2);
+					}
+				}
+				w += icw;
+			}
+		}
+
 		x += w;
 	}
+
+	// Draw layout symbol
 	w = TEXTW(m->ltsymbol);
 	drw_setscheme(drw, scheme[SchemeNorm]);
-	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
+	x = drw_text(drw, x, 0, w, bh, 0, m->ltsymbol, 0);
 
+	// Draw window title & icon
 	if ((w = m->ww - tw - stw - kctw - x) > bh) {
-
 		if (m->sel) {
 			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
 			drw_text(drw, x, 0, w, bh, lrpad / 2 + (m->sel->icon ? m->sel->icw + ICONSPACING : 0), m->sel->name, 0);
-			if (m->sel->icon)
+			if (m->sel->icon) {
 				drw_pic(drw, x + lrpad / 2, (bh - m->sel->ich) / 2, m->sel->icw, m->sel->ich, m->sel->icon);
+			}
 			if (m->sel->isfloating)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 		} else {
@@ -2215,6 +2244,16 @@ togglefloating(const Arg *arg)
 		resize(selmon->sel, selmon->sel->x, selmon->sel->y,
 			selmon->sel->w, selmon->sel->h, 0);
 	arrange(selmon);
+}
+
+void
+toggleicons(const Arg *arg)
+{
+	Monitor *m;
+	for (m = mons; m; m = m->next) {
+		m->showicons = !m->showicons;
+	}
+	drawbars();
 }
 
 void

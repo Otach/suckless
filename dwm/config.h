@@ -148,7 +148,7 @@ static const char *awfulmc_next[]   = { "sh", "/home/mason/suckless/dwm/scripts/
 //h - Increase Horizontal Window Size
 //H - Decrease Horizontal Window Size
 //i - Increase Master Stack Number
-//I
+//I - Toggle show icons
 //j - Focus Stack Forward
 //J - Rotate Stack Forward
 //k - Focus Stack Backward
@@ -183,7 +183,7 @@ static const char *awfulmc_next[]   = { "sh", "/home/mason/suckless/dwm/scripts/
 //W - Firefox Private Browser
 //x - lxappearance
 //X
-//y - Toggle show icons
+//y
 //Y
 //z - pavucontrol
 //Z
@@ -201,7 +201,7 @@ static Key keys[] = {
     { MODKEY,                           -1,            XK_u,            spawn,          {.v = mntwrkshare } },
     { MODKEY|ShiftMask,                 -1,            XK_u,            spawn,          {.v = untwrkshare } },
     { MODKEY,                           -1,            XK_b,            togglebar,      {0} },
-    { MODKEY,                           -1,            XK_y,            toggleicons,    {0} },
+    { MODKEY|ShiftMask,                 -1,            XK_i,            toggleicons,    {0} },
     { MODKEY|ShiftMask,                 -1,            XK_j,            rotatestack,    {.i = +1 } },
     { MODKEY|ShiftMask,                 -1,            XK_k,            rotatestack,    {.i = -1 } },
     { MODKEY,                           -1,            XK_j,            focusstack,     {.i = +1 } },

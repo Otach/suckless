@@ -901,10 +901,7 @@ drawbar(Monitor *m)
 						continue;
 
 					if (c->tags & 1 << i) {
-						// Draw a black rectangle underneath the image
-						drw_setscheme(drw, scheme[SchemeNorm]);
-						drw_rect(drw, x + w + icw, 0, c->icw + (lrpad / 2), bh, 1, 1);
-						// drw_rect(drw, x + w + icw, 0, c->icw, bh, 1, 1);
+						drw_rect(drw, x + w + icw, 0, c->icw + (lrpad / 2), bh, 1, !(urg & 1 << i));
 						drw_pic(drw, x + w + icw, (bh - c->ich) / 2, c->icw, c->ich, c->icon);
 						icw += c->icw + (lrpad / 2);
 					}

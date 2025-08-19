@@ -23,7 +23,7 @@ static const char *font_name = "-adobe-times-bold-r-normal--25-180-100-100-p-132
 
 /* text offsets */
 static const int x_offset = 1875;
-static const int y_offset = 1580;
+static const int y_offset = 500;
 
 /* time in seconds before the monitor shuts down */
 static const int monitortime = 5 * 60;

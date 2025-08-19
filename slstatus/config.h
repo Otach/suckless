@@ -63,12 +63,13 @@ static const char unknown_str[] = "n/a";
  */
 static const struct arg args[] = {
 	/* function       format           argument */
-    { hostname,       " %s | ",       NULL                         },
-    { kernel_release, " %s |",        NULL                         },
-	{ cpu_perc,       "  %s%% |",     NULL                         },
-	{ ram_perc,       "  %s%% ",      NULL        		            },
+    // { hostname,       " %s | ",       NULL                         },
+    // { kernel_release, " %s |",        NULL                         },
+	{ cpu_perc,       " 󰻠 %s%% |",     NULL                         },
+	{ ram_perc,       " 󰍛 %s%% ",      NULL        		            },
     { ram_used,       "(%s) |",        NULL                         },
-	{ disk_perc,      "  %s%% |",     "/"           		        },
-    { run_command,    " 墳 %s |",       "pamixer --get-volume-human" },
-	{ datetime, 	  "  %s",         "%Y/%m/%d - %I:%M %p "	    }
+	{ disk_perc,      " 󰋊 %s%% |",     "/"           		        },
+    { run_command,    " 󰕾 %s |",       "pamixer --get-volume-human" },
+	// { datetime, 	  "  %s",         "%Y/%m/%d - %I:%M %p "	    }
+	{ datetime, 	  " %s",         "%Y/%m/%d - %I:%M %p "	    }
 };

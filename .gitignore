@@ -4,6 +4,7 @@
 # dmenu files to ignore
 dmenu/dmenu
 dmenu/stest
+dmenu/scripts/mount_remote_shares.sh
 
 # slock files to ignore
 slock/slock
